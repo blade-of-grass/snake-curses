@@ -24,13 +24,14 @@ int main(int argc, const char** argv) {
     iodimens(io, &width, &height);
 
     MAP* map = map_init(width, height);
-    SNAKE* snake = snake_init('O');
+    SNAKE* snake = snake_init('O', (struct Point) { .x = width / 2, .y = height / 2 });
 
     enum Action action;
-    while ((action = ioin()) != QUIT) {
+    int collided = 0;
+    while ((action = ioin()) != QUIT && !collided) {
 
         snake_turn(snake, action);
-        snake_move(snake);
+        collided = snake_move(snake);
 
         int x, y;
         snake_get_head(snake, &x, &y);

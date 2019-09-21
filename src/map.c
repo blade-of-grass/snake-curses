@@ -27,7 +27,7 @@ void map_free(MAP* self) {
 }
 
 void map_draw(const MAP* self, IO* io) {
-    iodraw(io, self->fx, self->fy, '@');
+    iodraw(io, self->fx, self->fy, '#');
 }
 
 int map_eat(MAP* self, int x, int y) {

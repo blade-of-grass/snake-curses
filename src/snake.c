@@ -5,11 +5,6 @@
 
 #define MAX_LENGTH 100
 
-struct Point {
-    int x;
-    int y;
-};
-
 struct Snake {
     char skin;      // the character to draw the snake as
     enum Action dir;
@@ -25,11 +20,23 @@ const struct Point Direction[4] = {
     [WEST]  = { .x =-1, .y = 0  },
 };
 
-SNAKE* snake_init(char skin) {
+const enum Action Opposite[4] = {
+    [NORTH] = SOUTH,
+    [EAST] = WEST,
+    [SOUTH] = NORTH,
+    [WEST] = EAST,
+};
+
+SNAKE* snake_init(char skin, struct Point startPos) {
     SNAKE* self = malloc(sizeof(SNAKE));
     self->skin = skin;
-    self->len = 1;
+    self->len = 3;
+
     memset(&self->points[0], 0, MAX_LENGTH * sizeof(struct Point));
+    for (int i = 0; i < self->len; ++i) {
+        self->points[i] = startPos;
+        startPos.y -= 1;
+    }
 
     return self;
 }
@@ -39,17 +46,12 @@ void snake_free(SNAKE* self) {
 }
 
 void snake_turn(SNAKE* self, enum Action dir) {
-    if (dir >= NORTH && dir <= WEST && (
-       (dir != NORTH || self->dir != SOUTH) &&
-       (dir != SOUTH || self->dir != NORTH) &&
-       (dir != WEST || self->dir != EAST) &&
-       (dir != EAST || self->dir != WEST))) {
-
+    if (dir >= NORTH && dir <= WEST && dir != Opposite[self->dir]) {
         self->dir = dir;
     }
 }
 
-void snake_move(SNAKE* self) {
+int snake_move(SNAKE* self) {
     self->trail = self->points[self->len - 1];
 
     struct Point new_head = self->points[0];
@@ -57,8 +59,21 @@ void snake_move(SNAKE* self) {
     new_head.x += direction.x;
     new_head.y += direction.y;
 
+    // check for collisions
+    for (int i = 3; i < self->len; ++i) {
+        struct Point iter = self->points[i];
+
+        if (new_head.x == iter.x && new_head.y == iter.y) {
+            self->skin='x';
+            return 1;
+        }
+    }
+
+    // move the snake
     memcpy(&self->points[1], &self->points[0], self->len * sizeof(struct Point));
     self->points[0] = new_head;
+
+    return 0;
 }
 
 void snake_grow(SNAKE* self) {

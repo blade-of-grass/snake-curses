@@ -7,7 +7,12 @@
 
 typedef struct Snake SNAKE;
 
-SNAKE* snake_init(char skin);
+struct Point {
+    int x;
+    int y;
+};
+
+SNAKE* snake_init(char skin, struct Point startPos);
 
 void snake_free(SNAKE* self);
 
@@ -16,7 +21,8 @@ void snake_free(SNAKE* self);
 void snake_turn(SNAKE* self, enum Action dir);
 
 // move the snake
-void snake_move(SNAKE* self);
+// return true if snake has collided with itself
+int snake_move(SNAKE* self);
 
 // grow the snake
 void snake_grow(SNAKE* self);
