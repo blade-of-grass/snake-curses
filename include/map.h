@@ -14,4 +14,6 @@ void map_draw(const MAP* map, IO* io);
 
 int map_eat(MAP* map, int x, int y);
 
+int map_col(MAP* map, int x, int y);
+
 #endif // MAP_H

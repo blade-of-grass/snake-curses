@@ -6,7 +6,7 @@
 #define MAX_LENGTH 100
 
 struct Snake {
-    char skin;      // the character to draw the snake as
+    int skin;      // the character to draw the snake as
     enum Action dir;
     int len;        // length of the snake
     struct Point points[MAX_LENGTH]; // points that compose the snake
@@ -27,7 +27,7 @@ const enum Action Opposite[4] = {
     [WEST] = EAST,
 };
 
-SNAKE* snake_init(char skin, struct Point startPos) {
+SNAKE* snake_init(int skin, struct Point startPos) {
     SNAKE* self = malloc(sizeof(SNAKE));
     self->skin = skin;
     self->len = 3;

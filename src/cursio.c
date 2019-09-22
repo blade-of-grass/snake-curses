@@ -38,7 +38,7 @@ void iofree(IO* self) {
     free(self);
 }
 
-void iodraw(IO* self, int x, int y, char c) {
+void iodraw(IO* self, int x, int y, int c) {
     mvaddch(self->height - y, x, c);
 }
 

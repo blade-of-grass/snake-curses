@@ -12,7 +12,7 @@ struct Point {
     int y;
 };
 
-SNAKE* snake_init(char skin, struct Point startPos);
+SNAKE* snake_init(int skin, struct Point startPos);
 
 void snake_free(SNAKE* self);
 

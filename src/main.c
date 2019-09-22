@@ -23,18 +23,20 @@ int main(int argc, const char** argv) {
     int width, height;
     iodimens(io, &width, &height);
 
+    int skin = ' ';
+
     MAP* map = map_init(width, height);
-    SNAKE* snake = snake_init('O', (struct Point) { .x = width / 2, .y = height / 2 });
+    SNAKE* snake = snake_init(skin|A_REVERSE, (struct Point) { .x = width / 2, .y = height / 2 });
 
     enum Action action;
     int collided = 0;
     while ((action = ioin()) != QUIT && !collided) {
 
         snake_turn(snake, action);
-        collided = snake_move(snake);
 
         int x, y;
         snake_get_head(snake, &x, &y);
+        collided = snake_move(snake) || map_col(map, x, y);
         if (map_eat(map, x, y)) {
             snake_grow(snake);
         }

@@ -9,7 +9,7 @@ IO* ioini();
 
 void iofree(IO* self);
 
-void iodraw(IO* self, int x, int y, char c);
+void iodraw(IO* self, int x, int y, int c);
 
 void iodimens(IO* self, int* w, int* h);
 
