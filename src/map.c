@@ -1,16 +1,21 @@
 #include "map.h"
 #include <stdlib.h>
 
+struct Food {
+    struct Point pos;
+    int skin;
+};
+
 struct Map {
     int width;
     int height;
-    int food_x;
-    int food_y;
+    struct Food food;
 };
 
 void map_set_food(MAP* self) {
-    self->food_x = rand() % self->width;
-    self->food_y = rand() % self->height;
+    self->food.skin = 'O';
+    self->food.pos.x = rand() % self->width;
+    self->food.pos.y = rand() % self->height;
 }
 
 MAP* map_init(int width, int height) {
@@ -27,11 +32,11 @@ void map_free(MAP* self) {
 }
 
 void map_draw(const MAP* self, IO* io) {
-    iodraw(io, self->food_x, self->food_y, 'O');
+    iodraw(io, self->food.pos.x, self->food.pos.y, self->food.skin);
 }
 
-int map_eat(MAP* self, int x, int y) {
-    if (x == self->food_x && y == self->food_y) {
+int map_eat(MAP* self, struct Point pos) {
+    if (point_eq(pos, self->food.pos)) {
         map_set_food(self);
         return 1;
     }
@@ -39,6 +44,10 @@ int map_eat(MAP* self, int x, int y) {
     return 0;
 }
 
-int map_col(MAP* self, int x, int y) {
-    return x < 0 || y <= 0 || x >= self->width || y > self->height;
+int map_col(MAP* self, struct Point pos) {
+    return
+        pos.x < 0 ||
+        pos.y <= 0 ||
+        pos.x >= self->width ||
+        pos.y > self->height;
 }

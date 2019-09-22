@@ -34,11 +34,11 @@ int main(int argc, const char** argv) {
 
         snake_turn(snake, action);
 
-        int x, y;
-        snake_get_head(snake, &x, &y);
-        collided = snake_move(snake) || map_col(map, x, y);
-        if (map_eat(map, x, y)) {
-            snake_grow(snake);
+        struct Point pos;
+        snake_get_head(snake, &pos);
+        collided = snake_move(snake) || map_col(map, pos);
+        if (map_eat(map, pos)) {
+            snake_grow(snake, 2);
         }
 
         snake_draw(snake, io);

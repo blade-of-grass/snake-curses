@@ -76,13 +76,15 @@ int snake_move(SNAKE* self) {
     return 0;
 }
 
-void snake_grow(SNAKE* self) {
-    if (self->len == MAX_LENGTH) {
-        return;
-    }
+void snake_grow(SNAKE* self, int food_value) {
+    int previous_len = self->len;
+    self->len = clamp_max(self->len + food_value, MAX_LENGTH - 1);
 
-    self->points[self->len] = self->points[self->len - 1];
-    ++self->len;
+    int delta_len = self->len - previous_len;
+
+    for (int i = 0; i < delta_len; ++i) {
+        self->points[self->len + i] = self->points[previous_len - 1];
+    }
 }
 
 void snake_draw(const SNAKE* self, IO* io) {
@@ -93,9 +95,9 @@ void snake_draw(const SNAKE* self, IO* io) {
     iodraw(io, self->trail.x, self->trail.y, ' ');
 }
 
-void snake_get_head(const SNAKE* self, int* x, int* y) {
-    *x = self->points[0].x;
-    *y = self->points[0].y;
+void snake_get_head(const SNAKE* self, struct Point* pos) {
+    pos->x = self->points[0].x;
+    pos->y = self->points[0].y;
 }
 
 int snake_get_score(const SNAKE* self) {
